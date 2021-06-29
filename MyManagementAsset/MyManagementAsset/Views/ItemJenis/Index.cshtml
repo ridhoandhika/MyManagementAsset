@@ -1,0 +1,74 @@
+﻿@using X.PagedList.Mvc.Core; <!--import to get HTML Helper-->
+@using X.PagedList;
+@using X.PagedList.Mvc;
+
+@model IEnumerable<MyManagementAsset.Models.ItemJenis>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.jns_kode)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.jns_description)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.jns_initial)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.jns_kode)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.jns_description)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.jns_initial)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { jns_kode = item.jns_kode }) |
+                    @Html.ActionLink("Details", "Details", new { jns_kode = item.jns_kode }) |
+                    @Html.ActionLink("Delete", "Delete", new { jns_kode = item.jns_kode })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+@Html.PagedListPager((IPagedList)Model, page => Url.Action("Index", new { page = page }),
+    new X.PagedList.Mvc.Core.Common.PagedListRenderOptions
+    {
+        DisplayItemSliceAndTotal = true,
+        ContainerDivClasses = new[] { "navigation" },
+        LiElementClasses = new[] { "page-item" },
+        PageClasses = new[] { "page-link" },
+    })
+
+
+@section Scripts{
+    <script>
+        // Workaround to fix style of text for showing items .. through ..
+        // Problem related to Boostrap 4 according to issue in link below
+        // https://github.com/dncuug/X.PagedList/issues/127
+        $(document).ready(function () {
+            $('ul.pagination > li.disabled > a').addClass('page-link');
+        });
+    </script>
+}
